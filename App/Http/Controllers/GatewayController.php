@@ -37,7 +37,7 @@ class GatewayController extends Controller
                 $path = '/' . $slug_array[0] . '/' . $slug_array[1]; // we re-create the service path in order to find the uri
 
                 // we get the service from the Auth micro-service lumen app
-                $service_response = json_decode($this->routeService->route('POST', env("AUTH_URI") . '/api/auth/services', ["path" => $path]));
+                $service_response = json_decode($this->routeService->route('POST', env("AUTH_URI") . '/api/auth/services', ["path" => $path], ['Authorization_sso_secret' => env('SSO_SECRET')]));
                 if (!$service_response) {
                     throw new Exception("Error Processing Request", 1);
                 }
