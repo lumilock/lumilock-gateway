@@ -19,10 +19,12 @@ trait ConsumeExternalService
         try {
             $client = new Client([
                 'base_uri'  =>  $this->baseUri,
-                'http_errors' => false
+                'http_errors' => false,
+                'headers' => ['Connection' => 'close'], // Or simply add this to the request object
+                'CURLOPT_FORBID_REUSE' => true,
+                'CURLOPT_FRESH_CONNECT' => true,
             ]);
-
-            if (isset($this->secret)) {
+            if (isset($this->secret) && $this->secret !== '') {
                 $headers['Authorization_secret'] = $this->secret;
             }
             $promise = $client->requestAsync($method, $requestUrl, [
@@ -31,11 +33,18 @@ trait ConsumeExternalService
                 'synchronous' => false,
                 'timeout' => 10
             ]);
-
-            return $promise->wait()->getBody()->getContents();
+            $response = $promise->wait();
+            return ["content" => $response->getBody()->getContents(), "status" => $response->getStatusCode()];
             //https://github.com/guzzle/guzzle/issues/1127
         } catch (\Exception $e) {
-            dd($e);
+            return response()->json(
+                [
+                    'data' => null,
+                    'status' => 'CONNECTION_REFUSED',
+                    'message' => $e
+                ],
+                503
+            );
         }
     }
 }
