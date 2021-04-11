@@ -19,6 +19,7 @@ $this->app->router->group(
         $router->get('/{route:.*}/', 'GatewayController@routesGet');
         // $router->get('/test', 'GatewayController@routesGet');
         $router->post('/{route:.*}/', 'GatewayController@routesPost');
+        $router->put('/{route:.*}/', 'GatewayController@routesPost');
         // $app->get($uri, $callback);
         // $app->post($uri, $callback);
         // $app->put($uri, $callback);
