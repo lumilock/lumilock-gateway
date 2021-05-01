@@ -17,6 +17,7 @@ $this->app->router->group(
     ],
     function ($router) {
         $router->get('/{route:.*}/', 'GatewayController@routesGet');
+        $router->delete('/{route:.*}/', 'GatewayController@routesGet');
         // $router->get('/test', 'GatewayController@routesGet');
         $router->post('/{route:.*}/', 'GatewayController@routesPost');
         $router->put('/{route:.*}/', 'GatewayController@routesPost');
