@@ -47,6 +47,13 @@ Add CORS Middleware to `bootstrap/app.php`.
       \lumilock\lumilockGateway\App\Http\Middleware\CorsMiddleware::class
   ]);
 ```
+
+## .Env
+add these env var in your .env project file
+```.env
+AUTH_URI=<http://your_uri_api>
+SSO_SECRET=<your_auth_accepted_secret>
+```
 ## 🏗️ Create a package
 https://blog.cloudoki.com/creating-a-lumen-package/
 
