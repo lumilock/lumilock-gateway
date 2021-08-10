@@ -54,7 +54,7 @@ class GatewayController extends Controller
                 } else {
                     $path = '/' . $slug_array[0] . '/' . $slug_array[1]; // we re-create the service path in order to find the uri
                     // we get the service from the Auth micro-service lumen app
-                    $service_response = (Object) $this->routeService->route('POST', env("AUTH_URI") . '/api/auth/services/getByPath', ["path" => $path], ['Authorization_sso_secret' => env('SSO_SECRET')]);
+                    $service_response = (Object) $this->routeService->route('POST', env("AUTH_URI") . '/api/auth/services/getByPath', ["path" => $path], ['Authorization' => $request->header('Authorization'), 'Authorization_sso_secret' => env('SSO_SECRET')]);
                     $service_content = json_decode($service_response->content);
                     if (!$service_content) {
                         throw new Exception("Error Processing Request", 1);
@@ -98,7 +98,7 @@ class GatewayController extends Controller
                     return $this->authRequest($request->method(), $request->path(), $request->all(), $request->header('Authorization'));
                 } else {
                     // we get the service from the Auth micro-service lumen app
-                    $service_response = (Object) $this->routeService->route('POST', env("AUTH_URI") . '/api/auth/services/getByPath', ["path" => $path], ['Authorization_sso_secret' => env('SSO_SECRET')]);
+                    $service_response = (Object) $this->routeService->route('POST', env("AUTH_URI") . '/api/auth/services/getByPath', ["path" => $path], ['Authorization' => $request->header('Authorization'), 'Authorization_sso_secret' => env('SSO_SECRET')]);
                     $service_content = json_decode($service_response->content);
                     if (!$service_content) {
                         throw new Exception("Error Processing Request", 1);
