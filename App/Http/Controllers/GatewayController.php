@@ -50,7 +50,7 @@ class GatewayController extends Controller
             try {
                 // we check if it's a Auth request 
                 if (strcmp($slug_array[1], "auth") === 0) {
-                    return $this->authRequest($request->method(), $request->path(), [], $request->header('Authorization'));
+                    return $this->authRequest($request->method(), $request->getRequestUri(), [], $request->header('Authorization'));
                 } else {
                     $path = '/' . $slug_array[0] . '/' . $slug_array[1]; // we re-create the service path in order to find the uri
                     // we get the service from the Auth micro-service lumen app
@@ -63,7 +63,7 @@ class GatewayController extends Controller
                     $this->routeService->setUri($service->uri);
                     $this->routeService->setSecret($service->secret);
                     $headers['Authorization'] = $request->header('Authorization');
-                    $response = (Object) $this->routeService->route($request->method(), $request->path(), [], $headers);
+                    $response = (Object) $this->routeService->route($request->method(), $request->getRequestUri(), [], $headers);
                     return $this->successResponse($response->content, $response->status);
                 }
                 throw new Exception("Error Processing Request", 1);
@@ -95,7 +95,7 @@ class GatewayController extends Controller
                 $path = '/' . $slug_array[0] . '/' . $slug_array[1]; // we re-create the service path in order to find the uri
                 // we check if it's a Auth request 
                 if (strcmp($slug_array[1], "auth") === 0) {
-                    return $this->authRequest($request->method(), $request->path(), $request->all(), $request->header('Authorization'));
+                    return $this->authRequest($request->method(), $request->getRequestUri(), $request->all(), $request->header('Authorization'));
                 } else {
                     // we get the service from the Auth micro-service lumen app
                     $service_response = (Object) $this->routeService->route('POST', env("AUTH_URI") . '/api/auth/services/getByPath', ["path" => $path], ['Authorization' => $request->header('Authorization'), 'Authorization_sso_secret' => env('SSO_SECRET')]);
@@ -107,7 +107,7 @@ class GatewayController extends Controller
                     $this->routeService->setUri($service->uri);
                     $this->routeService->setSecret($service->secret);
                     $headers['Authorization'] = $request->header('Authorization');
-                    $response = (Object) $this->routeService->route($request->method(), $request->path(), $request->all(), $headers);
+                    $response = (Object) $this->routeService->route($request->method(), $request->getRequestUri(), $request->all(), $headers);
                     return $this->successResponse($response->content, $response->status);
                 }
                 throw new Exception("Error Processing Request", 1);
